@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.0-base-ubuntu20.04
+FROM nvidia/cuda:11.3.1-base-ubuntu20.04
 
 # Environments
 ARG DEBIAN_FRONTEND=noninteractive
@@ -11,9 +11,10 @@ RUN apt-get -y update && apt-get -y install \
     python3-pip
 
 RUN pip install --no-cache-dir -U pip && pip install --no-cache-dir \
-    torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio==0.7.2 \
-    -f https://download.pytorch.org/whl/torch_stable.html
-RUN  pip install --no-cache-dir deep-daze
+    torch==1.10.2+cu113 torchvision==0.11.3+cu113 \
+    torchaudio==0.10.2+cu113 -f \
+    https://download.pytorch.org/whl/cu113/torch_stable.html
+RUN  pip install --no-cache-dir deep-daze tweepy deep_translator
 
 VOLUME /test
 WORKDIR /test
