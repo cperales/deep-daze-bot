@@ -1,7 +1,9 @@
 import tweepy
 import configparser
 from pprint import pprint
-import time
+from deep_daze import Imagine
+from deep_translator import GoogleTranslator
+
 
 config = configparser.ConfigParser()
 config.read_file(open('config.ini'))
@@ -13,7 +15,7 @@ access_token = config.get('TWITTER', 'ACCESS_TOKEN')
 access_secret = config.get('TWITTER', 'ACCESS_TOKEN_SECRET')
 bearer_token = open('bearer_token.txt').readlines()[0]
 
-# Construct the API instance
+# Construct the API instance for replying tweets
 auth = tweepy.OAuthHandler(api_key, api_secret)
 auth.set_access_token(access_token, access_secret)
 api = tweepy.API(auth)
@@ -25,17 +27,46 @@ try:
 except:
     raise Exception("Error during authentication")
 
-print(auth.get_authorization_url())
 
-# public_tweets = api.home_timeline()
-# pprint(public_tweets[0])
-print()
-already_mentioned = list()
-for mention in api.mentions_timeline():
-    if mention not in already_mentioned:
-        screen_name = mention.user.screen_name
-        text = mention.text
-        text_wo_name = text.replace('@deepdazebot ', '')
-        print(text_wo_name)
-        already_mentioned.append(mention)
-        print()
+class MyStreamListener(tweepy.Stream):
+    def on_status(self, status):
+        # properties of the tweet
+        text = status.text
+        tweet_id = status.id
+        screen_name = status.user.screen_name
+
+        # Extract the text
+        text = text.lower()
+        text_wo_name = text.replace('@deepdazebot', '')
+        text_wo_name = GoogleTranslator(source='auto',
+                                        target='en').translate(text_wo_name)
+        filename = text_wo_name.replace(' ', '_') + '.jpg'
+
+        # Imagine
+        self.dream(text_wo_name)
+        api.update_status_with_media(filename=filename,
+                                     status='@' + screen_name + ' Your words were dreamt',
+                                     in_reply_to_status_id=tweet_id)
+        # q.enqueue(self.dream, text_wo_name)
+
+    @staticmethod
+    def dream(text):
+        imagine = Imagine(
+            text=text,
+            image_width=256,
+            num_layers=6,
+            batch_size=1,
+            epochs=10,
+            iterations=1000,
+            save_progress=False,
+            open_folder=False,
+            gradient_accumulate_every=16
+        )
+        imagine()
+
+# Instance the stream
+myStream = MyStreamListener(consumer_key=api_key,
+                                    consumer_secret=api_secret,
+                                    access_token=access_token,
+                                    access_token_secret=access_secret)
+myStream.filter(track=['@deepdazebot'])
