@@ -16,5 +16,5 @@ docker build -t deepdaze:latest -f Dockerfile .
 ### Run interactive mode and activate GPU
 
 ```bash
-docker run -it --rm --gpus all --privileged -v $(pwd):/test deepdaze:latest python3.9 twitter_bot.py
+docker run -it --rm --gpus all --privileged deepdaze:latest python3.9 twitter_bot.py
 ```
