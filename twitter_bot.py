@@ -52,14 +52,14 @@ class MyStreamListener(tweepy.Stream):
     def dream(text):
         imagine = Imagine(
             text=text,
-            image_width=256,
-            num_layers=32,
-            batch_size=8,
+            image_width=512,
+            num_layers=8,
+            batch_size=1,
             epochs=1,
             iterations=800,
             save_progress=False,
             open_folder=False,
-            gradient_accumulate_every=2
+            gradient_accumulate_every=1
         )
         imagine()
         del imagine
