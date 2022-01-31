@@ -56,7 +56,7 @@ class MyStreamListener(tweepy.Stream):
             num_layers=32,
             batch_size=8,
             epochs=1,
-            iterations=1000,
+            iterations=800,
             save_progress=False,
             open_folder=False,
             gradient_accumulate_every=2
