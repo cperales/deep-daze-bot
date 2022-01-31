@@ -55,11 +55,11 @@ class MyStreamListener(tweepy.Stream):
             image_width=512,
             num_layers=8,
             batch_size=1,
-            epochs=2,
+            epochs=1,
             iterations=1000,
             save_progress=False,
             open_folder=False,
-            gradient_accumulate_every=16
+            gradient_accumulate_every=4
         )
         imagine()
         del imagine
