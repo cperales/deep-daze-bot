@@ -1,9 +1,9 @@
 import tweepy
 import configparser
-from pprint import pprint
 from deep_daze import Imagine
 from deep_translator import GoogleTranslator
-
+import torch
+import gc
 
 config = configparser.ConfigParser()
 config.read_file(open('config.ini'))
@@ -47,7 +47,6 @@ class MyStreamListener(tweepy.Stream):
         api.update_status_with_media(filename=filename,
                                      status='@' + screen_name + ' Your words were dreamt',
                                      in_reply_to_status_id=tweet_id)
-        # q.enqueue(self.dream, text_wo_name)
 
     @staticmethod
     def dream(text):
@@ -57,13 +56,15 @@ class MyStreamListener(tweepy.Stream):
             num_layers=32,
             batch_size=8,
             epochs=2,
-            iterations=200,
+            iterations=1050,
             save_progress=False,
             open_folder=False,
             gradient_accumulate_every=2
         )
         imagine()
         del imagine
+        gc.collect()
+        torch.cuda.empty_cache()
 
 # Instance the stream
 myStream = MyStreamListener(consumer_key=api_key,

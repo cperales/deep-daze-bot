@@ -16,6 +16,5 @@ RUN pip install --no-cache-dir -U pip && pip install --no-cache-dir \
     https://download.pytorch.org/whl/cu113/torch_stable.html
 RUN  pip install --no-cache-dir deep-daze tweepy deep_translator
 
-VOLUME /test
-WORKDIR /test
+ADD twitter_bot.py twitter_bot.py
 RUN python3 -c "import torch; x = (torch.cuda.get_device_name(0) if torch.cuda.is_available() else None); print(x)"
