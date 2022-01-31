@@ -1,13 +1,14 @@
 from deep_daze import Imagine
 
 imagine = Imagine(
-    text="a house in the trees",
+    text="A dreamer",
     image_width=256,
     num_layers=6,
     batch_size=1,
-    save_progress=True,
+    epochs=10,
+    iterations=1000,
+    save_progress=False,
     open_folder=False,
-    gradient_accumulate_every=16 # Increase gradient_accumulate_every to correct for loss in low batch sizes
+    gradient_accumulate_every=16
 )
-
 imagine()
