@@ -45,7 +45,7 @@ class MyStreamListener(tweepy.Stream):
         # Imagine
         self.dream(text_wo_name)
         api.update_status_with_media(filename=filename,
-                                     status='@' + screen_name + ' Your words were dreamt',
+                                     status='.@' + screen_name + ' Your words were dreamt',
                                      in_reply_to_status_id=tweet_id)
 
     @staticmethod
@@ -55,11 +55,11 @@ class MyStreamListener(tweepy.Stream):
             image_width=512,
             num_layers=8,
             batch_size=1,
-            epochs=1,
-            iterations=800,
+            epochs=2,
+            iterations=1000,
             save_progress=False,
             open_folder=False,
-            gradient_accumulate_every=1
+            gradient_accumulate_every=16
         )
         imagine()
         del imagine
